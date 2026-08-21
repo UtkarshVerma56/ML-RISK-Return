@@ -1,17 +1,13 @@
 {
-  "model_type": "XGBoost Classifier",
   "best_params": {
     "subsample": 0.7,
-    "n_estimators": 200,
-    "min_child_weight": 3,
+    "n_estimators": 500,
+    "min_child_weight": 5,
     "max_depth": 3,
     "learning_rate": 0.01,
-    "colsample_bytree": 1.0
+    "colsample_bytree": 0.7
   },
-  "val_roc_auc": 0.6628497552867301,
-  "val_pr_auc": 0.2787181230996884,
-  "train_size": 1260,
-  "val_size": 270,
-  "test_size": 270,
-  "scale_pos_weight": 4.5506607929515415
+  "scale_pos_weight": 4.75662100456621,
+  "train_size": 12607,
+  "val_size": 2693
 }

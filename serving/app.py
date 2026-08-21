@@ -2,38 +2,27 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 import joblib
 import pandas as pd
-import numpy as np
 import json
 import os
 
-app = FastAPI(
-    title="Return Risk Scorer API",
-    description="Predicts the probability an e-commerce order will be returned, with explainable risk factors.",
-    version="1.0.0"
-)
+from serving.version_check import check_versions
+check_versions()
 
-# ---- Load model artifacts at startup ----
+app = FastAPI(title="Return Risk Scorer API", version="1.0.0")
+
 MODEL_DIR = os.path.join(os.path.dirname(__file__), '..', 'models')
-
 model = joblib.load(os.path.join(MODEL_DIR, 'return_risk_model.pkl'))
 preprocessor = joblib.load(os.path.join(MODEL_DIR, 'preprocessor.pkl'))
 explainer = joblib.load(os.path.join(MODEL_DIR, 'shap_explainer.pkl'))
 
 with open(os.path.join(MODEL_DIR, 'feature_names.json')) as f:
     feature_names = json.load(f)
-
 with open(os.path.join(MODEL_DIR, 'cost_analysis.json')) as f:
     cost_analysis = json.load(f)
 
 CHOSEN_THRESHOLD = cost_analysis['chosen_threshold']['value']
 
-RAW_NUMERIC_COLS = ['order_amount', 'discount_pct', 'customer_past_orders',
-                     'customer_past_returns', 'customer_return_rate', 'account_age_days',
-                     'day_of_week', 'hour_of_day', 'address_mismatch']
-RAW_CATEGORICAL_COLS = ['category', 'payment_method']
 
-
-# ---- Request schema ----
 class OrderInput(BaseModel):
     category: str = Field(..., example="apparel")
     payment_method: str = Field(..., example="cod")
@@ -54,14 +43,9 @@ class PredictionResponse(BaseModel):
     top_factors: list[str]
 
 
-# ---- Routes ----
 @app.get("/")
 def root():
-    return {
-        "message": "Return Risk Scorer API is running",
-        "docs": "/docs",
-        "health": "/health"
-    }
+    return {"message": "Return Risk Scorer API is running", "docs": "/docs", "health": "/health"}
 
 
 @app.get("/health")
@@ -72,24 +56,18 @@ def health():
 @app.post("/predict", response_model=PredictionResponse)
 def predict(order: OrderInput):
     try:
-        # customer_return_rate is derived, not raw input — compute it
         customer_return_rate = (
             order.customer_past_returns / order.customer_past_orders
             if order.customer_past_orders > 0 else 0.0
         )
-
         raw_row = pd.DataFrame([{
-            'order_amount': order.order_amount,
-            'discount_pct': order.discount_pct,
+            'order_amount': order.order_amount, 'discount_pct': order.discount_pct,
             'customer_past_orders': order.customer_past_orders,
             'customer_past_returns': order.customer_past_returns,
             'customer_return_rate': customer_return_rate,
-            'account_age_days': order.account_age_days,
-            'day_of_week': order.day_of_week,
-            'hour_of_day': order.hour_of_day,
-            'address_mismatch': order.address_mismatch,
-            'category': order.category,
-            'payment_method': order.payment_method
+            'account_age_days': order.account_age_days, 'day_of_week': order.day_of_week,
+            'hour_of_day': order.hour_of_day, 'address_mismatch': order.address_mismatch,
+            'category': order.category, 'payment_method': order.payment_method
         }])
 
         processed = preprocessor.transform(raw_row)
@@ -99,10 +77,8 @@ def predict(order: OrderInput):
         risk_flag = risk_score >= CHOSEN_THRESHOLD
 
         sv = explainer.shap_values(processed_df)[0]
-        contributions = pd.DataFrame({
-            'feature': feature_names,
-            'shap_value': sv
-        }).sort_values('shap_value', key=abs, ascending=False).head(3)
+        contributions = pd.DataFrame({'feature': feature_names, 'shap_value': sv}) \
+            .sort_values('shap_value', key=abs, ascending=False).head(3)
 
         top_factors = []
         for _, row in contributions.iterrows():
@@ -110,11 +86,8 @@ def predict(order: OrderInput):
             top_factors.append(f"{row['feature']} {direction} risk")
 
         return PredictionResponse(
-            risk_score=round(risk_score, 4),
-            risk_flag=risk_flag,
-            threshold_used=CHOSEN_THRESHOLD,
-            top_factors=top_factors
+            risk_score=round(risk_score, 4), risk_flag=risk_flag,
+            threshold_used=CHOSEN_THRESHOLD, top_factors=top_factors
         )
-
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

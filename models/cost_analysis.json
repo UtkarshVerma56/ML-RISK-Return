@@ -1,20 +1,20 @@
 {
   "cost_assumptions": {
-    "cost_false_positive_inr": 50,
-    "cost_false_negative_inr": 350,
-    "reasoning": "FN cost reflects reverse logistics (return shipping both ways, restocking, payment processing fees). FP cost reflects minor friction/goodwill cost of over-flagging a legitimate order."
+    "false_positive_inr": 50,
+    "false_negative_inr": 350
   },
-  "default_threshold_0.5": {
-    "total_cost_inr": 10700.0,
-    "precision": 0.3291139240506329,
-    "recall": 0.5306122448979592
+  "default_threshold": {
+    "value": 0.5,
+    "total_cost_inr": 93450.0,
+    "precision": 0.2781629116117851,
+    "recall": 0.6844349680170576
   },
   "chosen_threshold": {
-    "value": 0.37,
-    "total_cost_inr": 8050.0,
-    "precision": 0.2422680412371134,
-    "recall": 0.9591836734693877,
-    "savings_vs_default_inr": 2650.0,
-    "savings_pct": 24.766355140186917
+    "value": 0.41,
+    "total_cost_inr": 89950.0,
+    "precision": 0.24866666666666667,
+    "recall": 0.7953091684434968,
+    "savings_inr": 3500.0,
+    "savings_pct": 3.7453183520599254
   }
 }

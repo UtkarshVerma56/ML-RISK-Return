@@ -1,16 +1,15 @@
 {
-  "threshold": 0.5,
-  "roc_auc": 0.7107766183396436,
-  "pr_auc": 0.3118522924070399,
-  "precision": 0.3176470588235294,
-  "recall": 0.5510204081632653,
-  "f1_score": 0.40298507462686567,
+  "roc_auc": 0.7064020360514135,
+  "pr_auc": 0.3314270958851846,
+  "precision": 0.2734970364098222,
+  "recall": 0.6886993603411514,
+  "f1_score": 0.39151515151515154,
   "confusion_matrix": {
-    "true_negatives": 163,
-    "false_positives": 58,
-    "false_negatives": 22,
-    "true_positives": 27
+    "tn": 1373,
+    "fp": 858,
+    "fn": 146,
+    "tp": 323
   },
-  "test_set_size": 270,
-  "test_return_rate": 0.1814814814814815
+  "test_set_size": 2700,
+  "test_return_rate": 0.1737037037037037
 }
