@@ -48,3 +48,4 @@ See `models/model_card.md` for model details, intended use, and honest limitatio
 pip install -r requirements.txt
 uvicorn serving.app:app --reload
 ```
+# Testing auto-deploy
