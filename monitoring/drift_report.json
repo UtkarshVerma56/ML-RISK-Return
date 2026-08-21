@@ -1,0 +1,75 @@
+{
+  "total_features_checked": 10,
+  "features_drifted": 2,
+  "overall_drift_detected": true,
+  "details": [
+    {
+      "feature": "order_amount",
+      "test": "KS",
+      "statistic": 0.0444,
+      "p_value": 0.678,
+      "drifted": false
+    },
+    {
+      "feature": "discount_pct",
+      "test": "KS",
+      "statistic": 0.2383,
+      "p_value": 0.0,
+      "drifted": true
+    },
+    {
+      "feature": "customer_past_orders",
+      "test": "KS",
+      "statistic": 0.0239,
+      "p_value": 0.9981,
+      "drifted": false
+    },
+    {
+      "feature": "customer_past_returns",
+      "test": "KS",
+      "statistic": 0.0033,
+      "p_value": 1.0,
+      "drifted": false
+    },
+    {
+      "feature": "customer_return_rate",
+      "test": "KS",
+      "statistic": 0.0189,
+      "p_value": 1.0,
+      "drifted": false
+    },
+    {
+      "feature": "account_age_days",
+      "test": "KS",
+      "statistic": 0.0328,
+      "p_value": 0.9392,
+      "drifted": false
+    },
+    {
+      "feature": "day_of_week",
+      "test": "KS",
+      "statistic": 0.0383,
+      "p_value": 0.8342,
+      "drifted": false
+    },
+    {
+      "feature": "hour_of_day",
+      "test": "KS",
+      "statistic": 0.0228,
+      "p_value": 0.9991,
+      "drifted": false
+    },
+    {
+      "feature": "category",
+      "test": "PSI",
+      "psi_score": 0.3944,
+      "drifted": true
+    },
+    {
+      "feature": "payment_method",
+      "test": "PSI",
+      "psi_score": 0.0107,
+      "drifted": false
+    }
+  ]
+}
