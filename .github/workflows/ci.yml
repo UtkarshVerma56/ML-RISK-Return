@@ -18,21 +18,15 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
-
-      - name: Verify model artifacts load correctly
         run: |
-          python -c "
-          import joblib
-          model = joblib.load('models/return_risk_model.pkl')
-          preprocessor = joblib.load('models/preprocessor.pkl')
-          explainer = joblib.load('models/shap_explainer.pkl')
-          print('✅ All model artifacts load successfully')
-          "
+          pip install -r requirements.txt
+          pip install pytest httpx
 
-      - name: Test API starts and responds
+      - name: Run unit tests
+        run: python -m pytest tests/ -v
+
+      - name: Verify API health end-to-end
         run: |
-          pip install uvicorn fastapi requests
           touch serving/__init__.py
           nohup uvicorn serving.app:app --host 0.0.0.0 --port 8000 &
           sleep 10
