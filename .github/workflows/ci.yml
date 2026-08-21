@@ -1,0 +1,40 @@
+name: CI - Test Before Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Verify model artifacts load correctly
+        run: |
+          python -c "
+          import joblib
+          model = joblib.load('models/return_risk_model.pkl')
+          preprocessor = joblib.load('models/preprocessor.pkl')
+          explainer = joblib.load('models/shap_explainer.pkl')
+          print('✅ All model artifacts load successfully')
+          "
+
+      - name: Test API starts and responds
+        run: |
+          pip install uvicorn fastapi requests
+          touch serving/__init__.py
+          nohup uvicorn serving.app:app --host 0.0.0.0 --port 8000 &
+          sleep 10
+          curl -f http://localhost:8000/health || exit 1
+          echo "✅ Health check passed"
