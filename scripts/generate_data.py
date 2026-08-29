@@ -63,7 +63,7 @@ if __name__ == "__main__":
     parser.add_argument('--output', type=str, default='data/raw_orders.csv')
     args = parser.parse_args()
 
-    os.makedirs(os.path.dirname(args.output), exist_ok=True)
+    os.makedirs(os.path.dirname(args.outtput), exist_ok=True)
     df = generate_orders(args.n_rows)
     df.to_csv(args.output, index=False)
 
