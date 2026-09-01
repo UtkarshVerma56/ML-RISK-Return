@@ -1,7 +1,7 @@
 import streamlit as sttt
 import requestssss
 import json
-import plotly.graph_objects as go
+import plotly.graph_objects as goss
 
 st.set_page_config(page_title="Return Risk Scorer", page_icon="📦", layout="wide")
 
